@@ -3,12 +3,13 @@ import { CreateUser, DeleteUser, GetAllUser, GetUser, UpdateUser } from "../../c
 import { validateSchema } from "../../config/middleware/validateSchema.js";
 import { validateImagen } from "../../config/middleware/validateImagen.js";
 import { userSchemaRegister } from "../../config/schemas/user.js";
+import { authRequired } from "../../config/middleware/validateToken.js";
 
 const root = express.Router()
 
 root.post('/user', validateImagen, validateSchema(userSchemaRegister), CreateUser)
 
-root.get('/user', GetAllUser)
+root.get('/user/', authRequired, GetAllUser)
 
 root.get('/user/:id', GetUser)
 

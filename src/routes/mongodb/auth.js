@@ -16,5 +16,4 @@ root.get('/profile', authRequired, ProfileUser)
 
 root.post('/token', VerifyToken)
 
-
 export default root;

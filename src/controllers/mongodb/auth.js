@@ -54,7 +54,7 @@ export const LoginUser = async (req, res) => {
 
         if (!isMatch) return res.status(400).json("Pass Invalided")
 
-        const token = await createdToken({id: userDB._id})
+        const token = await createdToken({id: userDB._id, category:userDB.category })
         res.cookie('token', token)
         res.json({
             id: userDB._id,
