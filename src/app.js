@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import UserRoot from "./routes/mongodb/user.js";
 import AuthRoot from "./routes/mongodb/auth.js";
+import FileRoot from "./routes/mongodb/filemanagement.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,5 +32,6 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname,'public')))
 app.use('/api', AuthRoot)
 app.use('/api', UserRoot)
+app.use('/api', FileRoot)
 
 export default app

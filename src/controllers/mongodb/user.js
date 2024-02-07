@@ -1,5 +1,4 @@
 import bcryptjs from "bcryptjs";
-import multer from "multer";
 import User from "../../models/mongobd/user.js";
 import { resizeImage } from "../../config/funtions/resizeImage.js";
 

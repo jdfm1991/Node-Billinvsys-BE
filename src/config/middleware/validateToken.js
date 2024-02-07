@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
-import User from "../../models/mongobd/user.js";
 
 export const authRequired = (req, res, next) => {
 
@@ -18,10 +17,6 @@ export const authRequired = (req, res, next) => {
         if (user.category !== 1) return res.status(403).json({
             message: "Invalid User",
         })
-
-        
-
     })
-
     next()
 }

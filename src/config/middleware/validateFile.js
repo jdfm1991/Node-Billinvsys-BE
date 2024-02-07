@@ -1,9 +1,9 @@
 import multer from "multer";
-import { upload } from "../../config/funtions/uploadImage.js";
+import { upload } from "../funtions/uploadFile.js";
 
-const imageUp = upload.single('image')
+const imageUp = upload.single('file')
 
-export const validateImagen = (req, res, next) => {
+export const validateFile = (req, res, next) => {
     imageUp(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             return res.status(400).json([err.code])
