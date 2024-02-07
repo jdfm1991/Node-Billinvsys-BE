@@ -18,14 +18,14 @@ app.use(
       credentials: true,
     })
   );
-  app.options(
-    '*',
-    cors({
-      origin: true,
-      optionsSuccessStatus: 200,
-      credentials: true,
-    })
-  );
+app.options(
+  '*',
+  cors({
+    origin: true,
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
+);
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static(path.join(__dirname,'public')))

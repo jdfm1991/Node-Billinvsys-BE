@@ -1,17 +1,18 @@
 import express from "express";
-import { authRequired } from "../../config/middleware/validateToken.js";
 import { CreateUser, DeleteUser, GetAllUser, GetUser, UpdateUser } from "../../controllers/mongodb/user.js";
-import { upload } from "../../config/middleware/uploadImage.js";
+import { validateSchema } from "../../config/middleware/validateSchema.js";
+import { validateImagen } from "../../config/middleware/validateImagen.js";
+import { userSchemaRegister } from "../../config/schemas/user.js";
 
 const root = express.Router()
 
-root.post('/user', upload.single('image'), CreateUser)
+root.post('/user', validateImagen, validateSchema(userSchemaRegister), CreateUser)
 
 root.get('/user', GetAllUser)
 
 root.get('/user/:id', GetUser)
 
-root.put('/user/:id', upload.single('image'), UpdateUser)
+root.put('/user/:id', validateImagen, validateSchema(userSchemaRegister), UpdateUser)
 
 root.delete('/user/:id', DeleteUser)
 

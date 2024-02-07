@@ -1,4 +1,6 @@
 import multer from "multer";
+import Path from "path";
+
 
 const storage = multer.diskStorage({
     destination: (req,file,cb) => {
@@ -6,11 +8,31 @@ const storage = multer.diskStorage({
     },
     filename: (req,file,cb) => {
         const name = file.originalname
-        //const ext = file.originalname.split('.').pop()
         cb(null,`${name}`)
     }
 })
 
 export const upload = multer({
     storage:storage,
+    limits: {
+        fieldNameSize: 300,
+        fileSize: 1024 * 1024 * 10, // 6 Mb
+    },
+    fileFilter: (req, file, callback) => {
+        const acceptableExtensions = ['.png', '.jpg', '.gif', '.jpeg'];
+        if (!(acceptableExtensions.includes(Path.extname(file.originalname)))) {
+            const error = new Error('Invalid file type');
+            error.code = 'INVALID_FILE_TYPE';
+          return callback(error,false);
+        }
+        // added this
+        const fileSize = parseInt(req.headers['content-length']);
+        if (fileSize > (1024 * 1024 * 10)) {
+            const error = new Error('file too long');
+            error.code = 'FILE_TOO_LONG'
+          return callback(error,false);
+        }
+        // --
+        callback(null, true);
+      }
 })

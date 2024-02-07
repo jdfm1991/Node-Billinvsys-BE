@@ -1,10 +1,15 @@
 import bcryptjs from "bcryptjs";
+import multer from "multer";
 import User from "../../models/mongobd/user.js";
 import { resizeImage } from "../../config/funtions/resizeImage.js";
 
 export const CreateUser = async (req, res) => {
     try {
         const DataIns = req.body
+        const email = await User.findOne({ email:DataIns.email })
+        if (email) {
+            return res.status(400).json(['Email is already in use'])
+        }
         const PasswEnc = await bcryptjs.hash(DataIns.password,10)
         const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
         const newUser = new User({

@@ -3,11 +3,10 @@ import { CreateUser, LoginUser, LogoutUser, ProfileUser, VerifyToken } from "../
 import { validateSchema } from "../../config/middleware/validateSchema.js";
 import { loginSchema, registerSchema } from "../../config/schemas/auth.js";
 import { authRequired } from "../../config/middleware/validateToken.js";
-import { upload } from "../../config/middleware/uploadImage.js";
 
 const root = express.Router()
 
-root.post('/userreg',upload.single('image') ,validateSchema(registerSchema), CreateUser)
+root.post('/userreg',validateSchema(registerSchema), CreateUser)
 
 root.post('/login', validateSchema(loginSchema), LoginUser)
 
