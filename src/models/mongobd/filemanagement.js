@@ -11,9 +11,9 @@ const FileSchema = new mongoose.Schema({
         required: true,
     },
     user: {
-        type: String,
-        required: true,
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     status: {
         type: Boolean,

@@ -7,9 +7,6 @@ export const fileSchemaRegister = z.object({
         message: "Filename Is Required"
     }),
     file: z.instanceof(File).optional(),
-    user: z.string({
-        required_error:  "User Is Required"
-    }),
     status: z.boolean().optional(),
      
 

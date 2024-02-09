@@ -1,13 +1,15 @@
 import File from "../../models/mongobd/filemanagement.js";
+import User from "../../models/mongobd/user.js";
 
 export const CreateFile = async (req, res) => {
+    console.log(req.user)
     try {
         const DataIns = req.body
         const DataFile = req.file.filename
         const newFile = new File({
             filename: DataIns.filename,
             file: DataFile,
-            user: DataIns.user,
+            user: req.user.id,
             status: DataIns.status,
 		    
         });
@@ -31,6 +33,8 @@ export const CreateFile = async (req, res) => {
 
 export const GetAllFile = async (req, res) => {
     try {
+        const curUser = await User.findOne({_id:id})
+        
         const AllFile = await File.find()
         res.status(200).json(AllFile)
     } catch (error) {

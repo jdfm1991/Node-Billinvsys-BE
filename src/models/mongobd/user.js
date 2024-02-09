@@ -24,10 +24,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    category: {
-        type: Number,
-        default: 0,
-
+    type: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserType',
+        required: true
     }
 
 },{

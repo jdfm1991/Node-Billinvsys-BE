@@ -2,6 +2,17 @@ import bcryptjs from "bcryptjs";
 import User from "../../models/mongobd/user.js";
 import { resizeImage } from "../../config/funtions/resizeImage.js";
 
+const userDefault =[
+    {
+        name:'Super Usuario',
+        email:'admin@admin.com',
+        password:'admin2024',
+        status:true,
+        image:'NoImage.jpg',
+        type:'super user'
+    }
+]
+
 export const CreateUser = async (req, res) => {
     try {
         const DataIns = req.body
@@ -17,7 +28,7 @@ export const CreateUser = async (req, res) => {
             password: PasswEnc,
             status: DataIns.status,
             image: Dataimg,
-		    category: DataIns.category,
+		    type: DataIns.type,
         });
         //newUser.getUrlImg(Dataimg)
         if (req.file) {

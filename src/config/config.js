@@ -12,6 +12,10 @@ const config = {
         host: process.env.HOST_DATADASE,
         port: process.env.PORT_DATADASE,
         dbname: process.env.NAME_DATADASE
+    },
+    valuedefault: {
+        usertypedefault: process.env.DATA_USER_TYPE_DEDAULT,
+        departmentdefault: process.env.DATA_DEPARTMENT_DEDAULT
     }
 }
 
