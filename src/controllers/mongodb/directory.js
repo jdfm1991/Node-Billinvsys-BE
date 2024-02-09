@@ -10,9 +10,9 @@ export const DirectoryList = async (req, res) => {
         }
 
         files.forEach(function (data,i) {
-            file[i]  = data.split('.').shift()
+            file[i]  = data.charAt(0).toUpperCase()+data.split('.').shift().slice(1)
         }) 
               
-        return res.json(file.filter(file => file !== 'auth' && file !== 'directory'))
+        return res.json(file.filter(file => file !== 'Auth' && file !== 'Directory' && file !== 'Usertype'))
     })
 }
