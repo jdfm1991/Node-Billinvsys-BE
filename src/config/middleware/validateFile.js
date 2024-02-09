@@ -1,5 +1,5 @@
 import multer from "multer";
-import { upload } from "../funtions/uploadFile.js";
+import { upload } from "../functions/uploadFile.js";
 
 const imageUp = upload.single('file')
 

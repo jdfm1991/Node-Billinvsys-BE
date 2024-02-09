@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import User from "../../models/mongobd/user.js";
-import { resizeImage } from "../../config/funtions/resizeImage.js";
+import { resizeImage } from "../../config/functions/resizeImage.js";
 
 const userDefault =[
     {

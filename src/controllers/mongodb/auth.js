@@ -1,8 +1,8 @@
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createdToken } from "../../config/funtions/jwt.js";
+import { createdToken } from "../../config/functions/jwt.js";
 import User from "../../models/mongobd/user.js";
-import { resizeImage } from "../../config/funtions/resizeImage.js";
+import { resizeImage } from "../../config/functions/resizeImage.js";
 import { TOKEN_SECRET } from "../../config/config.js";
 
 export const CreateUser = async (req, res) => {
