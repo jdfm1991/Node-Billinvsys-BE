@@ -1,56 +1,71 @@
 import bcryptjs from "bcryptjs";
 import User from "../../models/mongobd/user.js";
+import UT from "../../models/mongobd/usertype.js";
 import { resizeImage } from "../../config/functions/resizeImage.js";
+import data from "../../config/strings.json" assert { type: 'json' };
 
-const userDefault =[
-    {
-        name:'Super Usuario',
-        email:'admin@admin.com',
-        password:'admin2024',
-        status:true,
-        image:'NoImage.jpg',
-        type:'super user'
-    }
-]
+const SU = data.users
 
 export const CreateUser = async (req, res) => {
     try {
-        const DataIns = req.body
-        const email = await User.findOne({ email:DataIns.email })
-        if (email) {
-            return res.status(400).json(['Email is already in use'])
-        }
-        const PasswEnc = await bcryptjs.hash(DataIns.password,10)
-        const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
-        const newUser = new User({
-            name: DataIns.name,
-            email:DataIns.email,
-            password: PasswEnc,
-            status: DataIns.status,
-            image: Dataimg,
-		    type: DataIns.type,
-        });
-        //newUser.getUrlImg(Dataimg)
-        if (req.file) {
-            resizeImage(req.file.path, `RS-100px-${req.file.filename}` ,100)
-            resizeImage(req.file.path, `RS-250px-${req.file.filename}` ,250)
-            resizeImage(req.file.path, `RS-500px-${req.file.filename}` ,500)
-        }
-        const Data = await newUser.save()
 
-        res.status(201).json({
-            ok: true,
-            status:201,
-            id: Data._id,
-            name: Data.name,
-            email:Data.email,
-            message: "User Created Successfully"
-        })
+        for (let i = 0; i < SU.length; i++) {
+            const existsSU = await User.findOne({ name:SU[i].name })
+            if (existsSU === null) {
 
+                const newSUT = await UT.findOne({ name: SU[i].type })
+                const PasswEnc = await bcryptjs.hash(SU[i].password,10)
+                const newSU = new User({
+                    name: SU[i].name,
+                    email:SU[i].email,
+                    password: PasswEnc,
+                    status: SU[i].status,
+                    image: SU[i].image,
+                    type: newSUT._id,
+                });
+                await newSU.save()
+            }
+        }
+        if (req) {
+            const DataIns = req.body
+            const email = await User.findOne({ email:DataIns.email })
+            if (email) {
+                return res.status(400).json(['Email is already in use'])
+            }
+            const PasswEnc = await bcryptjs.hash(DataIns.password,10)
+            const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
+            const newUser = new User({
+                name: DataIns.name,
+                email:DataIns.email,
+                password: PasswEnc,
+                status: DataIns.status,
+                image: Dataimg,
+                type: DataIns.type,
+            });
+            //newUser.getUrlImg(Dataimg)
+            if (req.file) {
+                resizeImage(req.file.path, `RS-100px-${req.file.filename}` ,100)
+                resizeImage(req.file.path, `RS-250px-${req.file.filename}` ,250)
+                resizeImage(req.file.path, `RS-500px-${req.file.filename}` ,500)
+            }
+            const Data = await newUser.save()
+    
+            res.status(201).json({
+                ok: true,
+                status:201,
+                id: Data._id,
+                name: Data.name,
+                email:Data.email,
+                message: "User Created Successfully"
+            }) 
+        }
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
+        if (req) {
+            res.status(500).json({
+                message: error.message
+            })
+        }
+        
     }
 }
 

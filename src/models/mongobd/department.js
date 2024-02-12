@@ -6,6 +6,9 @@ const DepartmentSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    icon: {
+        type: String,
+    },
 },{
     timestamps:true
 })

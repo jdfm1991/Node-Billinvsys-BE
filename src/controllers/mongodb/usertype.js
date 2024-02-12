@@ -1,26 +1,23 @@
 import UserType from "../../models/mongobd/usertype.js";
-import config from "../../config/config.js";
+import data from "../../config/strings.json" assert { type: 'json' };
 
-const valuedefault = config.valuedefault.usertypedefault.split(',')
+const type = data.usertypes
 
 export const CreateTypeUser = async (req, res) => {
+    
     try {
-        const existsType = await UserType.countDocuments()
-        if (existsType < valuedefault.length) {
-            for (let i = 0; i < valuedefault.length; i++) {
-                const type = valuedefault[i];
-                const curType = await UserType.findOne({name:type})
-                if (!curType) {
-                    const newType = new UserType({
-                        name: type,
-                    });
-                    await newType.save()
-                }
-            }  
-        }
+        for (let i = 0; i < type.length; i++) {
+            const newtype = type[i].name;
+            const curType = await UserType.findOne({name:newtype})
+            if (curType === null) {
+                const newType = new UserType({
+                    name: newtype
+                });
+                await newType.save()
+            }
+        } 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
+       console.log(error)
     }
+    
 }

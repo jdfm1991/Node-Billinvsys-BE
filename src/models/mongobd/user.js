@@ -29,7 +29,6 @@ const UserSchema = new mongoose.Schema({
         ref: 'UserType',
         required: true
     }
-
 },{
     timestamps:true
 })

@@ -1,0 +1,73 @@
+{
+    "usertypes": [
+        {
+            "name":"Super User"
+        },
+        {
+            "name":"Administrator"
+        },
+        {
+            "name":"Standard User"
+        }
+    ],
+    "users": [ 
+        {
+            "name":"admin",
+            "email":"admin@admin.com",
+            "password":"123456",
+            "image":"default.png",
+            "status":true,
+            "type":"Super User"
+        }
+    ],
+    "departments": [
+        {
+            "name":"Direccion",
+            "icon":"pi pi-building"
+        },
+        {
+            "name":"Administracion",
+            "icon":"pi pi-chart-line"
+        },
+        {
+            "name":"Produccion",
+            "icon":"pi pi-clock"
+        },
+        {
+            "name":"Recursos humanos",
+            "icon":"pi pi-envelope"
+        },
+        {
+            "name":"Comercial",
+            "icon":"pi pi-shopping-cart"
+        },
+        {
+            "name":"Contabilidad",
+            "icon":"pi pi-calculator",
+            "items":[]
+        },
+        {
+            "name":"ID / IT",
+            "icon":"pi pi-sitemap",
+            "items":[]
+        }
+    ],
+
+    "modules": [
+        {
+            "name":"Departamentos",
+            "icon":"pi pi-user",
+            "url":"/department"
+        },
+        {
+            "name":"Usuarios",
+            "icon":"pi pi-clone",
+            "url":"/user"
+        },
+        {
+            "name":"Modulos",
+            "icon":"pi pi-th-large",
+            "url":"modules"
+        }
+    ]
+}

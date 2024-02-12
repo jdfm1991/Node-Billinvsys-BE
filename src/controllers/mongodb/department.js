@@ -1,20 +1,21 @@
 import Department from "../../models/mongobd/department.js";
-import config from "../../config/config.js";
+import data from "../../config/strings.json" assert { type: 'json' };
 
-const valuedefault = config.valuedefault.departmentdefault.split(',')
+const departments = data.departments
 
 export const CreateDepartment= async (req, res) => {
+    
     try {
         const name = req ? req.body.name : null
         const existsDep = await Department.countDocuments()
 
-        if (existsDep < valuedefault.length) {
-            for (let index = 0; index < valuedefault.length; index++) {
-                const department = valuedefault[index];
-                const curDep = await Department.findOne({name:department})
+        if (existsDep < departments.length) {
+            for (let i = 0; i < departments.length; i++) {
+                const curDep = await Department.findOne({name:departments[i].name})
                 if (!curDep) {
                     const newDep = new Department({
-                        name: department,
+                        name: departments[i].name,
+                        icon: departments[i].icon
                     });
                     await newDep.save()
                 }
@@ -38,7 +39,10 @@ export const CreateDepartment= async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+    
+
 }
+
 
 export const GetAllDepartments = async (req, res) => {
     try {

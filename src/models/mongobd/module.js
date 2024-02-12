@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
 
 const ModuleSchema = new mongoose.Schema({
-    namemodule: {
+    name: {
         type: String,
         required: true,
         trim: true,
+    },
+    icon: {
+        type: String,
+    },
+    url: {
+        type: String,
+        required: true,
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,

@@ -17,4 +17,6 @@ root.put('/user/:id', validateImagen, validateSchema(userSchemaRegister), Update
 
 root.delete('/user/:id', DeleteUser)
 
+CreateUser()
+
 export default root;
