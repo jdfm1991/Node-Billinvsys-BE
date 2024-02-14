@@ -7,14 +7,13 @@ import Module from "../../models/mongobd/module.js";
 export const PermissionSU = async (req, res) => {
 
     const SU = await User.findOne().populate('type')
-
     if (SU.type.name === 'Super User') {
         const Dep = await Department.find()
         for (let i = 0; i < Dep.length; i++) {
 
-            const existsPD = await permissionD.find({user:SU._id, department:Dep[i]._id})
-
-            if (existsPD.length < Dep.length ) {
+            const existsPD = await permissionD.findOne({user:SU._id, department:Dep[i]._id})
+            if (!existsPD) {
+                
                 const SUPermissionD = new permissionD({
                     user:SU._id,
                     department:Dep[i]._id
@@ -25,9 +24,9 @@ export const PermissionSU = async (req, res) => {
             const Mod = await Module.find({department:Dep[i]._id})
 
             for (let l = 0; l < Mod.length; l++) {
-                const existsPM = await permissionM.find({user:SU._id, module:Mod[l]._id})
+                const existsPM = await permissionM.findOne({user:SU._id, module:Mod[l]._id})
 
-                if (existsPM.length < Mod.length) {
+                if (!existsPM) {
                     const SUPermissionM = new permissionM({
                         user:SU._id,
                         module:Mod[l]._id

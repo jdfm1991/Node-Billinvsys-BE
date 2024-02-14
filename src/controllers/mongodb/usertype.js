@@ -21,3 +21,12 @@ export const CreateTypeUser = async (req, res) => {
     }
     
 }
+
+export const GetUserTypes = async (req, res) => {
+    try {
+        const AllData = await UserType.find()
+        res.status(200).json(AllData)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}

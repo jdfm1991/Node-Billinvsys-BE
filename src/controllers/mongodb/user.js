@@ -8,39 +8,43 @@ const SU = data.users
 
 export const CreateUser = async (req, res) => {
     try {
-
-        for (let i = 0; i < SU.length; i++) {
-            const existsSU = await User.findOne({ name:SU[i].name })
-            if (existsSU === null) {
-
-                const newSUT = await UT.findOne({ name: SU[i].type })
-                const PasswEnc = await bcryptjs.hash(SU[i].password,10)
-                const newSU = new User({
-                    name: SU[i].name,
-                    email:SU[i].email,
-                    password: PasswEnc,
-                    status: SU[i].status,
-                    image: SU[i].image,
-                    type: newSUT._id,
-                });
-                await newSU.save()
+        
+        const contUser = await User.countDocuments()
+        if (contUser === 0) {
+            for (let i = 0; i < SU.length; i++) {
+                const existsSU = await User.findOne({ name:SU[i].name })
+                if (existsSU === null) {
+    
+                    const newSUT = await UT.findOne({ name: SU[i].type })
+                    const PasswEnc = await bcryptjs.hash(SU[i].password,10)
+                    const newSU = new User({
+                        name: SU[i].name,
+                        email:SU[i].email,
+                        password: PasswEnc,
+                        status: SU[i].status,
+                        image: SU[i].image,
+                        type: newSUT._id,
+                    });
+                    await newSU.save()
+                }
             }
-        }
-        if (req) {
-            const DataIns = req.body
-            const email = await User.findOne({ email:DataIns.email })
-            if (email) {
+        }      
+        
+            const {name,status,email,type,password} = req.body
+            const emailDB = await User.findOne({ email:email})
+            console.log(req.body)
+            if (emailDB) {
                 return res.status(400).json(['Email is already in use'])
             }
-            const PasswEnc = await bcryptjs.hash(DataIns.password,10)
+            const PasswEnc = await bcryptjs.hash(password,10)
             const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
             const newUser = new User({
-                name: DataIns.name,
-                email:DataIns.email,
+                name: name,
+                email: email,
                 password: PasswEnc,
-                status: DataIns.status,
+                status: status,
                 image: Dataimg,
-                type: DataIns.type,
+                type: type,
             });
             //newUser.getUrlImg(Dataimg)
             if (req.file) {
@@ -58,7 +62,7 @@ export const CreateUser = async (req, res) => {
                 email:Data.email,
                 message: "User Created Successfully"
             }) 
-        }
+        
     } catch (error) {
         if (req) {
             res.status(500).json({
