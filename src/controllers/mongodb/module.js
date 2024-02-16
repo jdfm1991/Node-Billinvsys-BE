@@ -1,5 +1,7 @@
+
 import Module from "../../models/mongobd/module.js";
-import Department from "../../models/mongobd/department.js";
+import PM from "../../models/mongobd/permissionM.js";
+
 import data from "../../config/strings.json" assert { type: 'json' };
 
 const modules = data.modules
@@ -30,7 +32,7 @@ export const CreateModule = async (req, res) => {
             const newDep = new Department({
                 name: name,
             });
-            const Data = await newDjep.save()
+            const Data = await newDep.save()
 
             res.status(201).json({
                 ok: true,
@@ -49,8 +51,15 @@ export const CreateModule = async (req, res) => {
 
 export const GetAllModules = async (req, res) => {
     try {
-        const AllModules = await Module.find()
-        res.status(200).json(AllModules)
+        const user = req.user.id
+        const Modules = []
+        const UserPM = await PM.find({user:user}).populate('module')
+        if (UserPM) {
+            UserPM.forEach(mod => {
+                Modules.push(mod.module)
+            });
+        }
+        res.status(200).json(Modules)
     } catch (error) {
         res.json({message: error.message})
     }

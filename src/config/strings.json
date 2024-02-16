@@ -43,13 +43,11 @@
         },
         {
             "name":"Contabilidad",
-            "icon":"pi pi-calculator",
-            "items":[]
+            "icon":"pi pi-calculator"
         },
         {
             "name":"ID / IT",
-            "icon":"pi pi-sitemap",
-            "items":[]
+            "icon":"pi pi-sitemap"
         }
     ],
 

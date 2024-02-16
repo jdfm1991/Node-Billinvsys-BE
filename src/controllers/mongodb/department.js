@@ -1,4 +1,5 @@
 import Department from "../../models/mongobd/department.js";
+import PD from "../../models/mongobd/permissionD.js";
 import data from "../../config/strings.json" assert { type: 'json' };
 
 const departments = data.departments
@@ -46,8 +47,15 @@ export const CreateDepartment= async (req, res) => {
 
 export const GetAllDepartments = async (req, res) => {
     try {
-        const AllDepartment = await Department.find()
-        res.status(200).json(AllDepartment)
+        const user = req.user.id
+        const Departments = []
+        const UserPD = await PD.find({user:user}).populate('department')
+        if (UserPD) {
+            UserPD.forEach(mod => {
+                Departments.push(mod.department )
+            });
+        }
+        res.status(200).json(Departments)
     } catch (error) {
         res.json({message: error.message})
     }

@@ -11,11 +11,11 @@ root.post('/user', validateImagen, validateSchema(userSchemaRegister), CreateUse
 
 root.get('/user/', authRequired, GetAllUser)
 
-root.get('/user/:id', GetUser)
+root.get('/user/:id', authRequired, GetUser)
 
-root.put('/user/:id', validateImagen, validateSchema(userSchemaRegister), UpdateUser)
+root.put('/user/:id', authRequired, validateImagen, validateSchema(userSchemaRegister), UpdateUser)
 
-root.delete('/user/:id', DeleteUser)
+root.delete('/user/:id', authRequired, DeleteUser)
 
 CreateUser()
 

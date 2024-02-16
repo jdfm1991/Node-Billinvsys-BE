@@ -2,7 +2,6 @@ import File from "../../models/mongobd/filemanagement.js";
 import User from "../../models/mongobd/user.js";
 
 export const CreateFile = async (req, res) => {
-    console.log(req.user)
     try {
         const DataIns = req.body
         const DataFile = req.file.filename

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const PermissionModuleSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Department',
+        ref: 'User',
         required: true
     },
     module: {
