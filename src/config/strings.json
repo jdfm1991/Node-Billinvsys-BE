@@ -54,18 +54,13 @@
     "modules": [
         {
             "name":"Departamentos",
-            "icon":"pi pi-user",
+            "icon":"pi pi-th-large",
             "url":"/department"
         },
         {
             "name":"Usuarios",
-            "icon":"pi pi-clone",
+            "icon":"pi pi-user",
             "url":"/user"
-        },
-        {
-            "name":"Modulos",
-            "icon":"pi pi-th-large",
-            "url":"modules"
         }
     ]
 }

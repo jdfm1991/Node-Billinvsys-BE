@@ -1,5 +1,6 @@
 
 import Module from "../../models/mongobd/module.js";
+import Department from "../../models/mongobd/department.js";
 import PM from "../../models/mongobd/permissionM.js";
 
 import data from "../../config/strings.json" assert { type: 'json' };
