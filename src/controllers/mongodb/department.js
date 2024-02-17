@@ -44,8 +44,16 @@ export const CreateDepartment= async (req, res) => {
 
 }
 
-
 export const GetAllDepartments = async (req, res) => {
+    try {
+        const AllDepartments = await Department.find()
+        res.status(200).json(AllDepartments)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+export const GetDepartmentsByID = async (req, res) => {
     try {
         const user = req.user.id
         const Departments = []

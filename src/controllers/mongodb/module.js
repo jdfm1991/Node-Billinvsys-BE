@@ -51,6 +51,16 @@ export const CreateModule = async (req, res) => {
 
 export const GetAllModules = async (req, res) => {
     try {
+
+        const AllModules = await Module.find()
+        res.status(200).json(AllModules)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+export const GetModulesById = async (req, res) => {
+    try {
         const user = req.user.id
         const Modules = []
         const UserPM = await PM.find({user:user}).populate('module')

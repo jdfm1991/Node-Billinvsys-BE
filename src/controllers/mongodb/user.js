@@ -10,8 +10,8 @@ const SU = data.users
 
 export const CreateUser = async (req, res) => {
     try {
-        const contUser = await User.countDocuments()
-        if (contUser === 0) {
+        const countUser = await User.countDocuments()
+        if (countUser === 0) {
             for (let i = 0; i < SU.length; i++) {
                 const existsSU = await User.findOne({ name:SU[i].name })
                 if (existsSU === null) {
@@ -30,12 +30,18 @@ export const CreateUser = async (req, res) => {
             }
         }      
         const {name,status,email,type,password,depart} = req.body
+        const PasswEnc = await bcryptjs.hash(password,10)
+        const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
         const emailDB = await User.findOne({ email:email})
         if (emailDB) {
             return res.status(400).json(['Email is already in use'])
         }
-        const PasswEnc = await bcryptjs.hash(password,10)
-        const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
+    const typeDB = await UT.findOne({name:/.*super.*/i}, '_id' ) 
+             
+        if (type == typeDB._id) {
+            return res.status(400).json(['You Cannot Create more Than One Super User'])
+        }
+        
         const newUser = new User({
             name: name,
             email: email,
@@ -117,30 +123,69 @@ export const GetUser = async(req, res) => {
 export const UpdateUser = async(req,res) => {
     try {
         const id = req.params.id
-        const DataIns = req.body
+        const {name,status,email,type,password,depart,modul} = req.body
         const DataActDB = await User.findOne({_id:id})
         const Dataimg = req.file ? req.file.filename:DataActDB.image
         var PasswEnc = ''
-        if (DataIns.password) {
-            if (DataIns.password!==DataActDB.password) {
-                PasswEnc = await bcryptjs.hash(DataIns.password,10)
+        if (password) {
+            if (password!==DataActDB.password) {
+                PasswEnc = await bcryptjs.hash(password,10)
             }else{
-                PasswEnc = DataIns.password    
+                PasswEnc = password    
             }
         } else {
             PasswEnc = DataActDB.password
         }
-        
         await User.updateOne({_id:id}, { $set: {
-            name: DataIns.name,
-            email:DataIns.email,
+            name: name,
+            email:email,
             password: PasswEnc,
-            status: DataIns.status,
+            status: status,
             image: Dataimg,
-		    category: DataIns.category
-        }}).then( res => {
-            console.log(res)
-        })
+		    type: type
+        }})
+        const countPD = await PD.countDocuments({user:id})
+        if (depart.length > countPD) {
+            for (let i = 0; i < depart.length; i++) {
+                const departDB = await PD.findOne({ department:depart[i], user:id})
+                if (!departDB) {
+                    const newPD = new PD({
+                        user:id,
+                        department:depart[i]
+                    })
+                    await newPD.save()   
+                } 
+            }
+        } else {
+            for (let i = 0; i < countPD; i++) {
+                const departDB = await PD.findOne({ department:depart[i], user:id})
+                if (!departDB) {
+                    await PD.deleteOne({user:id})
+                } 
+            }  
+        }
+
+        const countPM = await PM.countDocuments({user:id})
+        if (modul.length > countPM) {
+            for (let i = 0; i < modul.length; i++) {
+                const modulDB = await PM.findOne({ module:modul[i], user:id})
+                if (!modulDB) {
+                    const newPM = new PD({
+                        user:id,
+                        module:modul[i]
+                    })
+                    await newPM.save()   
+                } 
+            }
+        } else {
+            for (let i = 0; i < countPM; i++) {
+                const modulDB = await PM.findOne({ module:modul[i], user:id})
+                if (!modulDB) {
+                    await PM.deleteOne({user:id})
+                } 
+            }  
+        }
+        
         res.status(200).json({
             ok: true,
             status:200,
@@ -148,7 +193,6 @@ export const UpdateUser = async(req,res) => {
         })
     } catch (error) {
         res.json({message: error.message})
-        console.log(error)
     }
 }
 
