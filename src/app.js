@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from 'url';
-import { PermissionSU } from "./controllers/mongodb/permission.js";
+import { init } from "./controllers/mongodb/permission.js";
 import TypeUserRoot from "./routes/mongodb/usertype.js";
 import UserRoot from "./routes/mongodb/user.js";
 import DepartmentRoot from "./routes/mongodb/department.js";
@@ -31,7 +31,6 @@ app.options(
     credentials: true,
   })
 );
-PermissionSU()
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static(path.join(__dirname,'public')))
@@ -41,5 +40,9 @@ app.use('/api', DepartmentRoot)
 app.use('/api', ModuleRoot)
 app.use('/api', AuthRoot)
 app.use('/api', FileRoot)
+
+init()
+
+
 
 export default app

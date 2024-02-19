@@ -17,6 +17,6 @@ root.put('/user/:id', authRequired, validateImagen, validateSchema(userSchemaReg
 
 root.delete('/user/:id', authRequired, DeleteUser)
 
-CreateUser()
+
 
 export default root;

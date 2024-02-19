@@ -5,8 +5,6 @@ import { authRequired } from "../../config/middleware/validateToken.js";
 
 const root = express.Router()
 
-CreateTypeUser()
-
 root.get('/usertypes/', authRequired, GetUserTypes)
 
 

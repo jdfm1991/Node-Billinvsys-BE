@@ -1,7 +1,5 @@
 import UserType from "../../models/mongobd/usertype.js";
-import data from "../../config/strings.json" assert { type: 'json' };
 
-const type = data.usertypes
 
 export const CreateTypeUser = async (req, res) => {
     

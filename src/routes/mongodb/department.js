@@ -7,11 +7,9 @@ const root = express.Router()
 root.post('/department', CreateDepartment)
 
 root.get('/department', authRequired, GetAllDepartments)
+
 root.get('/department/:id', authRequired, GetDepartmentsByID)
 
 root.delete('/department/:id', DeleteDepartment)
-
-CreateDepartment()
-
 
 export default root;

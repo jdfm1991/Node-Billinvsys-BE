@@ -4,31 +4,12 @@ import UT from "../../models/mongobd/usertype.js";
 import PD from "../../models/mongobd/permissionD.js";
 import PM from "../../models/mongobd/permissionM.js";
 import { resizeImage } from "../../config/functions/resizeImage.js";
-import data from "../../config/strings.json" assert { type: 'json' };
 
-const SU = data.users
+
+
 
 export const CreateUser = async (req, res) => {
-    try {
-        const countUser = await User.countDocuments()
-        if (countUser === 0) {
-            for (let i = 0; i < SU.length; i++) {
-                const existsSU = await User.findOne({ name:SU[i].name })
-                if (existsSU === null) {
-                    const newSUT = await UT.findOne({ name: SU[i].type })
-                    const PasswEnc = await bcryptjs.hash(SU[i].password,10)
-                    const newSU = new User({
-                        name: SU[i].name,
-                        email:SU[i].email,
-                        password: PasswEnc,
-                        status: SU[i].status,
-                        image: SU[i].image,
-                        type: newSUT._id,
-                    });
-                    await newSU.save()
-                }
-            }
-        }      
+    try {     
         const {name,status,email,type,password,depart} = req.body
         const PasswEnc = await bcryptjs.hash(password,10)
         const Dataimg = req.file ? req.file.filename:'NoImage.jpg'
@@ -75,11 +56,10 @@ export const CreateUser = async (req, res) => {
             message: "User Created Successfully"
         })
     } catch (error) {
-        if (req) {
-            res.status(500).json({
-                message: error.message
-            })
-        }
+        res.status(500).json({
+            message: error.message
+        })
+        
         
     }
 }

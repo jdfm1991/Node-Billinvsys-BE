@@ -1,44 +1,24 @@
 import Department from "../../models/mongobd/department.js";
+import Module from "../../models/mongobd/module.js";
 import PD from "../../models/mongobd/permissionD.js";
-import data from "../../config/strings.json" assert { type: 'json' };
-
-const departments = data.departments
 
 export const CreateDepartment= async (req, res) => {
-    
     try {
-        const name = req ? req.body.name : null
-        const existsDep = await Department.countDocuments()
-
-        if (existsDep < departments.length) {
-            for (let i = 0; i < departments.length; i++) {
-                const curDep = await Department.findOne({name:departments[i].name})
-                if (!curDep) {
-                    const newDep = new Department({
-                        name: departments[i].name,
-                        icon: departments[i].icon
-                    });
-                    await newDep.save()
-                }
-            }  
-        }
-
-        if (name !== null) {
-            const newDep = new Department({
-                name: name,
-            });
-            const Data = await newDep.save()
-
-            res.status(201).json({
-                ok: true,
-                status:201,
-                name: Data.name,
-                message: "User Created Successfully"
-            })
-            
-        }
+        const { name } = req.body
+        const newDep = new Department({
+            name: name,
+        });
+        const Data = await newDep.save()
+        res.status(201).json({
+            ok: true,
+            status:201,
+            name: Data.name,
+            message: "User Created Successfully"
+        })
     } catch (error) {
-        console.log(error)
+        res.status(500).json({
+            message: error.message
+        })
     }
     
 
@@ -72,14 +52,13 @@ export const GetDepartmentsByID = async (req, res) => {
 export const DeleteDepartment = async(req,res) => { 
     try {
         const id = req.params.id
-        await Department.deleteOne({_id:id}).then( res => {
-            console.log(res)  
-        })
-        res.status(200).json({
-            ok: true,
-            status:204,
-            message:"Department Deleted",
-        })
+        const dependence = await Module.findOne({department:id})
+        if (dependence) {
+            return res.status(400).json({message:'You Cannot Delete This Department Since It Has Linked Modules'})
+        }
+        const del = await Department.deleteOne({_id:id})
+        await PD.deleteOne({department:id})
+        res.status(200).json({message:"Department Deleted"})
     } catch (error) {
         res.json({message: error.message})
     }

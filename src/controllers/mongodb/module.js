@@ -1,48 +1,24 @@
 
+import fs from "fs";
 import Module from "../../models/mongobd/module.js";
-import Department from "../../models/mongobd/department.js";
 import PM from "../../models/mongobd/permissionM.js";
 
-import data from "../../config/strings.json" assert { type: 'json' };
-
-const modules = data.modules
-
 export const CreateModule = async (req, res) => {
-    
     try {
-        const name = req ? req.body.name : null
-        const existsMod = await Module.countDocuments()
-
-        if (existsMod < modules.length) {
-            for (let i = 0; i < modules.length; i++) {
-                const curModule = await Module.findOne({name:modules[i].name})
-                if (curModule === null) {
-                    const department = await Department.findOne({name:'ID / IT'})
-                    const newModule = new Module({
-                        name: modules[i].name,
-                        icon: modules[i].icon,
-                        url: modules[i].url,
-                        department:department._id
-                    });
-                     await newModule.save()
-                }
-            }  
-        }
-
-        if (name !== null) {
-            const newDep = new Department({
-                name: name,
-            });
-            const Data = await newDep.save()
-
-            res.status(201).json({
-                ok: true,
-                status:201,
-                name: Data.name,
-                message: "User Created Successfully"
-            })
+        const {name,depart, url} = req.body
+        const newMod = new Module({
+            name: name,
+            department: depart,
+            url: url
             
-        }
+        });
+        const Data = await newMod.save()
+        res.status(201).json({
+            ok: true,
+            status:201,
+            name: Data.name,
+            message: "Module Created Successfully"
+        })
     } catch (error) {
         console.log(error)
     }
@@ -52,9 +28,29 @@ export const CreateModule = async (req, res) => {
 
 export const GetAllModules = async (req, res) => {
     try {
-
-        const AllModules = await Module.find()
+        const AllModules = await Module.find().populate('department')
         res.status(200).json(AllModules)
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+export const GetModulesAvailable = async (req, res) => {
+    try {
+        const file =[]
+        const newfile = fs.readdir('./src/routes/mongodb', async (error, files) => {
+            if (error) {
+                throw error
+            }
+            for (let i = 0; i < files.length; i++) {
+                const url = '/'+files[i].split('.').shift()
+                const modReg = await Module.findOne({url:url})
+                if (!modReg) {
+                    file[i]  = url
+                }
+            }
+            return res.json(file.filter(file => file !== '/auth' && file !== '/directory' && file !== '/usertype' && file !== '/module'))
+        })
     } catch (error) {
         res.json({message: error.message})
     }
